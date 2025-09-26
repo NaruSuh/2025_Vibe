@@ -1,0 +1,61 @@
+name: 📧 Weekly Research Update
+
+on:
+  schedule:
+    # 매주 월요일 오전 9시 (KST) = 일요일 오후 11시 (UTC)
+    - cron: '0 0 * * 1'
+  workflow_dispatch: # 수동 실행 허용
+
+jobs:
+  send-weekly-updates:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🔄 Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 📦 Cache Dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: 📥 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r "[Streamlit] Clinical Ph.D Machine/requirements.txt"
+        pip install PyYAML  # For subscriber data management
+
+    - name: 📊 Generate Weekly Report
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+        PUBMED_API_KEY: ${{ secrets.PUBMED_API_KEY }}
+      run: |
+        cd "[Streamlit] Clinical Ph.D Machine"
+        python weekly_automation.py
+
+    - name: 📝 Update Automation Log
+      run: |
+        echo "$(date): Weekly research update completed" >> automation_log.txt
+
+    - name: 💾 Commit Log Updates
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add automation_log.txt
+        git commit -m "📊 Weekly automation log update - $(date +%Y-%m-%d)" || exit 0
+
+    - name: 🚀 Push Changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
