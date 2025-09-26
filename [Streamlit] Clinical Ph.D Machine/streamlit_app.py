@@ -353,11 +353,11 @@ def main():
             help="OpenAI에서 발급받은 API 키를 입력하세요"
         )
         
-        # .env 파일에서 API 키 가져오기 (백업)
+        # .env 파일과 Streamlit secrets에서 API 키 가져오기 (백업)
         if not youtube_api_key:
-            youtube_api_key = os.getenv('YOUTUBE_API_KEY')
+            youtube_api_key = os.getenv('YOUTUBE_API_KEY') or st.secrets.get('YOUTUBE_API_KEY')
         if not openai_api_key:
-            openai_api_key = os.getenv('OPENAI_API_KEY')
+            openai_api_key = os.getenv('OPENAI_API_KEY') or st.secrets.get('OPENAI_API_KEY')
         
         # API 키 상태 표시
         st.markdown("---")
