@@ -12,6 +12,10 @@ class EmailService:
     def __init__(self):
         # API 키 가져오기
         self.api_key = self._get_api_key()
+        self.sender_email = os.getenv('SENDER_EMAIL', 'naru.seo.official@gmail.com')
+        self.app_url = os.getenv('APP_URL', 'http://localhost:8501')
+        self.sender = {"email": self.sender_email, "name": "Clinical Psychology Hub"}
+
         if self.api_key:
             # Brevo API 설정
             configuration = sib_api_v3_sdk.Configuration()
@@ -46,7 +50,7 @@ class EmailService:
         try:
             send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
                 to=[{"email": to_email}],
-                sender={"email": "naru.seo.official@gmail.com", "name": "Clinical Psychology Hub"},
+                sender=self.sender,
                 subject=subject,
                 html_content=html_content
             )
@@ -85,7 +89,7 @@ class EmailService:
             # 이메일 발송 객체 생성
             send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
                 to=[{"email": recipient_email, "name": recipient_name}],
-                sender={"email": "naru.seo.official@gmail.com", "name": "Clinical Psychology Hub"},
+                sender=self.sender,
                 subject=f"📚 주간 임상심리학 연구 동향 - {datetime.now().strftime('%Y년 %m월 %d일')}",
                 html_content=html_content
             )
@@ -120,7 +124,7 @@ class EmailService:
         try:
             test_email = sib_api_v3_sdk.SendSmtpEmail(
                 to=[{"email": recipient_email}],
-                sender={"email": "naru.seo.official@gmail.com", "name": "Clinical Psychology Hub"},
+                sender=self.sender,
                 subject="🧪 테스트 이메일 - Clinical Ph.D Machine",
                 html_content="""
                 <html>
@@ -173,7 +177,7 @@ class EmailService:
                     </ul>
 
                     <p style="margin-top: 30px;">
-                        <a href="http://localhost:8501"
+                        <a href="{self.app_url}"
                            style="background-color: #2E86AB; color: white; padding: 12px 24px;
                                   text-decoration: none; border-radius: 5px; display: inline-block;">
                             📱 플랫폼에서 더 보기
@@ -191,7 +195,7 @@ class EmailService:
 
             send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
                 to=[{"email": recipient_email, "name": recipient_name}],
-                sender={"email": "noreply@clinicalpsychplatform.com", "name": "Clinical Psychology Platform"},
+                sender=self.sender,
                 subject=f"🔔 {professor_name} 교수님 업데이트 알림",
                 html_content=html_content
             )
@@ -293,7 +297,7 @@ class EmailService:
         # Footer
         html_content += f"""
                     <div style="text-align: center; margin: 40px 0 20px 0;">
-                        <a href="http://localhost:8501"
+                        <a href="{self.app_url}"
                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                                   color: white; padding: 15px 30px; text-decoration: none;
                                   border-radius: 25px; display: inline-block; font-weight: bold;">

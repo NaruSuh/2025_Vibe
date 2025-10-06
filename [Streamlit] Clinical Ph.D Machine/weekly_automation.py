@@ -210,50 +210,7 @@ def search_psychology_videos_for_automation(api_key: str) -> List[Dict]:
 
     return videos
 
-def filter_content_by_interests(research_data: Dict, interests: List[str]) -> Dict:
-    """구독자 관심사에 따라 콘텐츠 필터링"""
-    if not interests:
-        return research_data
 
-    filtered_data = {
-        "papers": [],
-        "videos": [],
-        "trending_topics": []
-    }
-
-    # 관심사를 소문자로 변환
-    lower_interests = [interest.lower() for interest in interests]
-
-    # 논문 필터링
-    for paper in research_data.get("papers", []):
-        title_lower = paper.get("title", "").lower()
-        abstract_lower = paper.get("abstract", "").lower()
-
-        if any(interest in title_lower or interest in abstract_lower for interest in lower_interests):
-            filtered_data["papers"].append(paper)
-
-    # 동영상 필터링
-    for video in research_data.get("videos", []):
-        title_lower = video.get("title", "").lower()
-
-        if any(interest in title_lower for interest in lower_interests):
-            filtered_data["videos"].append(video)
-
-    # 트렌딩 주제 필터링
-    for topic in research_data.get("trending_topics", []):
-        keyword_lower = topic.get("keyword", "").lower()
-
-        if any(interest in keyword_lower for interest in lower_interests):
-            filtered_data["trending_topics"].append(topic)
-
-    # 필터링된 결과가 너무 적으면 원본 데이터의 일부 사용
-    if len(filtered_data["papers"]) < 2:
-        filtered_data["papers"] = research_data.get("papers", [])[:3]
-
-    if len(filtered_data["videos"]) < 1:
-        filtered_data["videos"] = research_data.get("videos", [])[:2]
-
-    return filtered_data
 
 def update_automation_stats(success: int, errors: int, total: int):
     """자동화 통계 업데이트"""

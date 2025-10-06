@@ -10,7 +10,7 @@ class PubMedService:
 
     def __init__(self):
         # NCBI Entrez 이메일 설정 (필수)
-        Entrez.email = "research@clinicalpsychplatform.com"
+        Entrez.email = os.getenv("PUBMED_EMAIL", "default.email@example.com")
         Entrez.tool = "ClinicalPsychologyPlatform"
 
     def search_recent_papers(
@@ -147,7 +147,7 @@ class PubMedService:
                 "authors": authors_str,
                 "journal": journal,
                 "pub_date": pub_date,
-                "abstract": abstract[:200] + "..." if len(abstract) > 200 else abstract,
+                "abstract": abstract[:300] + "..." if len(abstract) > 300 else abstract,
                 "pmid": pmid,
                 "url": url
             }
