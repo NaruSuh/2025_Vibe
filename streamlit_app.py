@@ -88,8 +88,13 @@ def get_question_templates():
         ]
     }
 
-def chat_with_gpt(api_key, professor_data, user_message, conversation_history=[]):
-    """ChatGPT API를 사용한 대화 함수"""
+def chat_with_gpt(api_key, professor_data, user_message, conversation_history=None):
+    """ChatGPT API를 사용한 대화 함수
+
+    Note: conversation_history의 기본값을 None으로 설정하여 mutable default argument 문제 방지
+    """
+    if conversation_history is None:
+        conversation_history = []
     try:
         client = openai.OpenAI(api_key=api_key)
         
@@ -178,8 +183,8 @@ def format_view_count(view_count):
             return f"{count//10000:,}만"
         else:
             return f"{count:,}"
-    except:
-        return view_count
+    except (ValueError, TypeError):
+        return str(view_count)
 
 def get_psychology_categories():
     """임상심리학 관련 카테고리 목록"""
@@ -609,7 +614,7 @@ def display_video_results(videos, compact=False):
         try:
             pub_date = datetime.fromisoformat(published_at.replace('Z', '+00:00'))
             formatted_date = pub_date.strftime('%Y-%m-%d')
-        except:
+        except (ValueError, AttributeError):
             formatted_date = '날짜 없음'
         
         col1, col2, col3, col4, col5 = st.columns([0.8, 3.5, 1.2, 1, 1])

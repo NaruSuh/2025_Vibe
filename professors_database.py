@@ -63,13 +63,6 @@ APA_PROFESSORS_DATABASE = {
         "location": "New Haven, CT",
         "professors": [
             {
-                "name": "Dr. Marsha Linehan",
-                "research_areas": ["dialectical behavior therapy", "borderline personality disorder", "suicide", "emotion regulation"],
-                "research_keywords": "dialectical behavior therapy DBT borderline personality disorder suicide emotion regulation mindfulness",
-                "email": "linehan@yale.edu",
-                "lab": "Behavioral Research and Therapy Clinics"
-            },
-            {
                 "name": "Dr. Alan Kazdin",
                 "research_areas": ["child therapy", "conduct disorder", "aggression", "evidence-based treatment"],
                 "research_keywords": "child therapy conduct disorder aggression evidence-based treatment parent management training",
@@ -398,13 +391,6 @@ APA_PROFESSORS_DATABASE = {
         "program_type": "PhD Clinical Psychology",
         "location": "San Diego, CA",
         "professors": [
-            {
-                "name": "Dr. Marsha Linehan",
-                "research_areas": ["borderline personality disorder", "DBT", "suicide", "emotion regulation"],
-                "research_keywords": "borderline personality disorder DBT dialectical behavior therapy suicide emotion regulation mindfulness",
-                "email": "linehan@ucsd.edu",
-                "lab": "Behavioral Research and Therapy Clinics"
-            },
             {
                 "name": "Dr. Amy Lansing",
                 "research_areas": ["adolescent risk behavior", "substance abuse", "HIV prevention"],
